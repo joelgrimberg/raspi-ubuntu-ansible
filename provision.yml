@@ -1,4 +1,2 @@
 ---
-
 - import_playbook: standalone.yml
-- import_playbook: kubernetes.yml

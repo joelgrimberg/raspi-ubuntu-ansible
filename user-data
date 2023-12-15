@@ -9,22 +9,20 @@
 #
 
 # Set your hostname here, the manage_etc_hosts will update the hosts file entries as well
-hostname: rashome1
+hostname: lab.home
 
 # Enable password authentication with the SSH daemon
 ssh_pwauth: true
 
 ## Add users and groups to the system, and import keys with the ssh-import-id
 users:
-- name: ansible
-  primary-group: users
-  shell: /bin/bash
-  sudo: ALL=(ALL) NOPASSWD:ALL
-  passwd: $5$JohOZuDSz8s4hrMS$WAmGo.fT8UTVLLExKKag1KEP9QAIn16KJCfcEEhfnWC
-  groups: users,adm,dialout,audio,plugdev,netdev,video
-  lock_passwd: true
-  ssh-authorized-keys:
-    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDtpAxHXoJaIxbbfkTZGh6IPqCfQyD7oBSwDxdocNmzxbMXbfqwML/CN7Rfp0icBC+fCL03LgcpmZ9nuF1Jvfjp90JhnXWD2hrnLjBrOaP4x6RlTSkFLSLxgJaLe6JTjb3pMJmkPgqpNhtC/T2SyfG8G5MRDnNItyn5vof2ZxanDO5rs2unNpr11LIFqa9s/UmjUQFOgeqWT8OZWY239abdMzh2OvY4gsDn5KCOHuzPdy8zcYeevLozInY4kNvywZtx+KkA0j6X9LHTO0Il7IzvPcdpw8VlqMK/mw3ENcE4aHfbmGyRKOSmamP5Wi0fCZqjXYnFQy+nyBIkz7Yi3IFQjUVuCuafIBvDmWUCuYiL3fmCH4R+KdNzE/Jes3zXABjcYF89fHRu2O99kKKjj53Un7SUdghtJrH9h4FJKOrZHgRqT4udJ2vOwxJB9qwW8Q0vqn/U79Ds80+H3updm40OUJB93LtMPpwqIKghuDsFaYO/J62zK38UBLZpUvKeCf8= ansible@rashome1
+  - name: joelgrimberg
+    primary-group: users
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    passwd: joelgrimberg
+    groups: users,adm,dialout,audio,plugdev,netdev,video
+    lock_passwd: false
 
 ## Update apt database and upgrade packages on first boot
 package_update: true
@@ -32,16 +30,16 @@ package_upgrade: true
 
 ## Install additional packages on first boot
 packages:
-- avahi-daemon
-- ansible
+  - avahi-daemon
+  - ansible
 
 ## Run arbitrary commands at rc.local like time
 runcmd:
   # Pickup the hostname changes
   - 'sudo systemctl restart avahi-daemon'
   # Run Ansible play
-  - 'sudo ansible-pull -U https://github.com/clayshek/raspi-ubuntu-ansible.git -i inventory.yml provision.yml > /var/log/ansible-provision.run 2>&1'
+  - 'sudo ansible-pull -U https://github.com/joelgrimberg/raspi-ubuntu-ansible.git -i inventory.yml provision.yml > /var/log/ansible-provision.run 2>&1'
 
 powerstate:
-  delay: "+5"
+  delay: '+5'
   mode: reboot
